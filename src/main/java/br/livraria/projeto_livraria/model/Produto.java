@@ -15,6 +15,8 @@ public class Produto {
     private String categoria;
     private String descricao;
     private int estoque;
+    private String comentario; // Novo campo de comentário
+    private String imagemUrl; // Campo para armazenar a URL da imagem
 
     // Getters e Setters
     public String getId() {
@@ -71,5 +73,21 @@ public class Produto {
 
     public void setEstoque(int estoque) {
         this.estoque = estoque;
+    }
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
+    }
+
+    public String getImagemUrl() {
+        return imagemUrl;
+    }
+
+    public void setImagemUrl(String imagemUrl) {
+        this.imagemUrl = imagemUrl;
     }
 }
