@@ -2,6 +2,13 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
+    const [isLogin, setIsLogin] = useState(true); // Alternar entre Login e Cadastro
+    const [isAuthenticated, setIsAuthenticated] = useState(false); // Indica se o usuário está logado
+    const [usuario, setUsuario] = useState('');
+    const [senha, setSenha] = useState('');
+    const [email, setEmail] = useState('');
+
+    // Dados da tela de produtos
     const [produtos, setProdutos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -25,11 +32,124 @@ function App() {
         fetchProdutos();
     }, []);
 
+    const handleLoginSubmit = (e) => {
+        e.preventDefault();
+        console.log(`Login realizado com o usuário: ${usuario}`);
+        setIsAuthenticated(true);
+        alert('Login realizado com sucesso!');
+    };
+
+    const handleRegisterSubmit = (e) => {
+        e.preventDefault();
+        console.log(`Cadastro realizado com o usuário: ${usuario}, email: ${email}`);
+        alert('Cadastro realizado com sucesso!');
+        setIsLogin(true); // Voltar para a tela de login após cadastro
+    };
+
+    if (!isAuthenticated) {
+        return (
+            <div className="app">
+                <header className="header">
+                    <h1 className="logo"><i className="fas fa-book"></i> Avaliação de Livros</h1>
+                </header>
+
+                <main className="main">
+                    {isLogin ? (
+                        <div className="login-container">
+                            <h2>Login</h2>
+                            <form onSubmit={handleLoginSubmit}>
+                                <div className="input-group">
+                                    <label htmlFor="usuario">Usuário:</label>
+                                    <input
+                                        type="text"
+                                        id="usuario"
+                                        value={usuario}
+                                        onChange={(e) => setUsuario(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="input-group">
+                                    <label htmlFor="senha">Senha:</label>
+                                    <input
+                                        type="password"
+                                        id="senha"
+                                        value={senha}
+                                        onChange={(e) => setSenha(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <button type="submit" className="submit-button">Entrar</button>
+                            </form>
+                            <p>
+                                Não tem uma conta?{' '}
+                                <span className="toggle-link" onClick={() => setIsLogin(false)}>
+                                    Cadastre-se aqui
+                                </span>
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="register-container">
+                            <h2>Cadastro</h2>
+                            <form onSubmit={handleRegisterSubmit}>
+                                <div className="input-group">
+                                    <label htmlFor="usuario">Usuário:</label>
+                                    <input
+                                        type="text"
+                                        id="usuario"
+                                        value={usuario}
+                                        onChange={(e) => setUsuario(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="input-group">
+                                    <label htmlFor="email">Email:</label>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="input-group">
+                                    <label htmlFor="senha">Senha:</label>
+                                    <input
+                                        type="password"
+                                        id="senha"
+                                        value={senha}
+                                        onChange={(e) => setSenha(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <button type="submit" className="submit-button">Cadastrar</button>
+                            </form>
+                            <p>
+                                Já tem uma conta?{' '}
+                                <span className="toggle-link" onClick={() => setIsLogin(true)}>
+                                    Faça login aqui
+                                </span>
+                            </p>
+                        </div>
+                    )}
+                </main>
+
+                <footer className="footer">
+                    <div className="social-icons">
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram"></i></a>
+                    </div>
+                    <p>&copy; 2024 Avaliação de Livros. Todos os direitos reservados.</p>
+                </footer>
+            </div>
+        );
+    }
+
     return (
         <div>
             <header className="header">
                 <div className="header-container">
-                    <h1 className="logo">Avaliação de Livros</h1>
+                    <h1 className="logo"><i className="fas fa-book"></i> Avaliação de Livros</h1>
                     <nav>
                         <ul className="nav">
                             <li><a href="#" className="nav-link"><i className="fas fa-home"></i> Início</a></li>
@@ -40,9 +160,6 @@ function App() {
                 </div>
             </header>
 
-            <div className="banner-container">
-                <img src="path_to_your_banner_image.jpg" alt="Banner da Livraria" className="banner" />
-            </div>
             <main className="main">
                 <h2>Explore e Avalie os Livros</h2>
                 <div className="card-container">
@@ -59,27 +176,19 @@ function App() {
                                 author={produto.autor}
                                 description={produto.descricao}
                                 rating={produto.classificacao}
-                                imagemUrl={produto.imagemUrl}  // Passando a URL da imagem
+                                imagemUrl={produto.imagemUrl}
                             />
                         ))
                     )}
                 </div>
             </main>
             <footer className="footer">
-                <p>&copy; 2024 Avaliação de Livros. Todos os direitos reservados.</p>
-                <div className="footer-links">
-                    <a href="#">Sobre Nós</a>
-                    <a href="#">Política de Privacidade</a>
-                    <a href="#">Termos de Uso</a>
-                    <a href="#">Contato</a>
-                </div>
                 <div className="social-icons">
-                    <a href="#" title="Facebook"><i className="fab fa-facebook-f"></i></a>
-                    <a href="#" title="Twitter"><i className="fab fa-twitter"></i></a>
-                    <a href="#" title="LinkedIn"><i className="fab fa-linkedin-in"></i></a>
-                    <a href="#" title="Instagram"><i className="fab fa-instagram"></i></a>
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook-f"></i></a>
+                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-twitter"></i></a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram"></i></a>
                 </div>
-                <p className="footer-note">Desenvolvido com carinho pela equipe de Livraria de Avaliações.</p>
+                <p>&copy; 2024 Avaliação de Livros. Todos os direitos reservados.</p>
             </footer>
         </div>
     );
